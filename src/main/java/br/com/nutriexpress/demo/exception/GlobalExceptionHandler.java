@@ -22,4 +22,22 @@ public class GlobalExceptionHandler {
         });
         return errors;
     }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Map<String, String> handleResourceNotFound(ResourceNotFoundException ex) {
+        Map<String, String> error = new java.util.HashMap<>();
+        error.put("erro", ex.getMessage());
+        error.put("status", "404");
+        return error;
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> handleIllegalArgument(IllegalArgumentException ex) {
+        Map<String, String> error = new java.util.HashMap<>();
+        error.put("erro", ex.getMessage());
+        error.put("status", "400");
+        return error;
+    }
 }
