@@ -4,17 +4,15 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
-import jakarta.validation.constraints.Pattern;
-
 import java.math.BigDecimal;
 
 public record PratoRequestDTO(
-        @NotBlank String nome,
-        @NotBlank String descricao,
-        @NotNull @Positive BigDecimal valor,
-        @NotBlank String categoria,
-        @NotNull @PositiveOrZero Integer calorias,
-        @NotNull @Positive Double quantidade,
-        @NotBlank @Pattern(regexp = "g|ml") String unidadeMedida
+        @NotBlank(message = "Nome é obrigatório") String nome,
+        @NotBlank(message = "Descrição é obrigatória") String descricao,
+        @NotNull(message = "Valor é obrigatório") @Positive(message = "Valor deve ser positivo") BigDecimal valor,
+        @NotBlank(message = "Categoria é obrigatória") String categoria,
+        @NotNull(message = "Calorias são obrigatórias") @PositiveOrZero(message = "Calorias não podem ser negativas") Integer calorias,
+        @NotNull(message = "Quantidade é obrigatória") @Positive(message = "Quantidade deve ser positiva") Double quantidade,
+        @NotBlank(message = "Unidade de medida é obrigatória") String unidadeMedida
 ) {
 }

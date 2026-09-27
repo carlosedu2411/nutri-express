@@ -1,13 +1,12 @@
 package br.com.nutriexpress.demo.repository;
 
 import br.com.nutriexpress.demo.model.Prato;
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PratoRepository extends JpaRepository<Prato, Long> {
 
-     List<Prato> findByCategoriaIgnoreCase(String categoria);
+    List<Prato> findByCategoria(String categoria);
 
     List<Prato> findByCaloriasLessThanEqual(Integer max);
 

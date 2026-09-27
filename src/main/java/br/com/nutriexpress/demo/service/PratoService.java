@@ -1,15 +1,13 @@
 package br.com.nutriexpress.demo.service;
 
-import br.com.nutriexpress.demo.exception.PratoNaoEncontradoException;
-import br.com.nutriexpress.demo.model.Prato;
-import br.com.nutriexpress.demo.repository.PratoRepository;
 import br.com.nutriexpress.demo.dto.PratoRequestDTO;
 import br.com.nutriexpress.demo.dto.PratoResponseDTO;
 import br.com.nutriexpress.demo.dto.PratoValorRequestDTO;
-import org.springframework.stereotype.Service;
-
+import br.com.nutriexpress.demo.exception.PratoNaoEncontradoException;
+import br.com.nutriexpress.demo.model.Prato;
+import br.com.nutriexpress.demo.repository.PratoRepository;
 import java.util.List;
-
+import org.springframework.stereotype.Service;
 
 @Service
 public class PratoService {
@@ -21,10 +19,7 @@ public class PratoService {
     }
 
     public PratoResponseDTO criar(PratoRequestDTO dto) {
-        if (repository.existsByNomeIgnoreCase(dto.nome())) {
-            throw new IllegalArgumentException("Já existe um prato com esse nome");
-        }
-
+        validarNomeDuplicado(dto.nome(), null);
         return toDTO(repository.save(toEntity(dto)));
     }
 
@@ -35,12 +30,13 @@ public class PratoService {
     }
 
     public PratoResponseDTO buscarPorId(Long id) {
-        return toDTO(repository.findById(id)
-                .orElseThrow(() -> new PratoNaoEncontradoException(id)));
+        Prato prato = repository.findById(id)
+                .orElseThrow(() -> new PratoNaoEncontradoException(id));
+        return toDTO(prato);
     }
 
     public List<PratoResponseDTO> listarPorCategoria(String categoria) {
-        return repository.findByCategoriaIgnoreCase(categoria)
+        return repository.findByCategoria(categoria)
                 .stream()
                 .map(this::toDTO)
                 .toList();
@@ -50,10 +46,9 @@ public class PratoService {
         Prato prato = repository.findById(id)
                 .orElseThrow(() -> new PratoNaoEncontradoException(id));
 
-        // Regra de negocio: dois pratos nao podem ter o mesmo nome, inclusive na atualizacao.
-        if (repository.existsByNomeIgnoreCaseAndIdNot(dto.nome(), id)) {
-            throw new IllegalArgumentException("Ja existe um prato com esse nome");
-        }
+        // Regra de negócio: não permitir dois pratos com o mesmo nome, ignorando maiúsculas e minúsculas,
+        // mesmo que o nome venha de um prato diferente. O próprio prato pode manter o nome atual.
+        validarNomeDuplicado(dto.nome(), id);
 
         prato.setNome(dto.nome());
         prato.setDescricao(dto.descricao());
@@ -83,8 +78,17 @@ public class PratoService {
     public void remover(Long id) {
         Prato prato = repository.findById(id)
                 .orElseThrow(() -> new PratoNaoEncontradoException(id));
-
         repository.delete(prato);
+    }
+
+    private void validarNomeDuplicado(String nome, Long idAtual) {
+        boolean jaExiste = idAtual == null
+                ? repository.existsByNomeIgnoreCase(nome)
+                : repository.existsByNomeIgnoreCaseAndIdNot(nome, idAtual);
+
+        if (jaExiste) {
+            throw new IllegalArgumentException("Já existe um prato com esse nome");
+        }
     }
 
     private Prato toEntity(PratoRequestDTO dto) {
