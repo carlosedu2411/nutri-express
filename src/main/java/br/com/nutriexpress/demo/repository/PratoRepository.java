@@ -7,5 +7,11 @@ import java.util.List;
 
 public interface PratoRepository extends JpaRepository<Prato, Long> {
 
+     List<Prato> findByCategoriaIgnoreCase(String categoria);
+
     List<Prato> findByCaloriasLessThanEqual(Integer max);
+
+    boolean existsByNomeIgnoreCase(String nome);
+
+    boolean existsByNomeIgnoreCaseAndIdNot(String nome, Long id);
 }

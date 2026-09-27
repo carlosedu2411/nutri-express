@@ -36,26 +36,29 @@ public class LoadDatabase {
             Prato prato1 = new Prato();
             prato1.setNome("Salada Verde");
             prato1.setDescricao("Salada fresca com legumes");
-            prato1.setPreco(25.90);
+            prato1.setValor(new java.math.BigDecimal("25.90"));
+            prato1.setCategoria("vegano");
             prato1.setCalorias(150);
-            prato1.setDisponivel(true);
-            prato1.setCategoriaId(cat1.getId());
+            prato1.setQuantidade(300.0);
+            prato1.setUnidadeMedida("g");
             
             Prato prato2 = new Prato();
             prato2.setNome("Frango Grelhado");
             prato2.setDescricao("Peito de frango com arroz integral");
-            prato2.setPreco(35.50);
+            prato2.setValor(new java.math.BigDecimal("35.50"));
+            prato2.setCategoria("fitness");
             prato2.setCalorias(450);
-            prato2.setDisponivel(true);
-            prato2.setCategoriaId(cat1.getId());
+            prato2.setQuantidade(350.0);
+            prato2.setUnidadeMedida("g");
             
             Prato prato3 = new Prato();
             prato3.setNome("Chocolate Quente");
             prato3.setDescricao("Bebida quente nutritiva");
-            prato3.setPreco(12.00);
+            prato3.setValor(new java.math.BigDecimal("12.00"));
+            prato3.setCategoria("sobremesa saudável");
             prato3.setCalorias(300);
-            prato3.setDisponivel(true);
-            prato3.setCategoriaId(cat2.getId());
+            prato3.setQuantidade(250.0);
+            prato3.setUnidadeMedida("ml");
             
             log.info("Preloading " + pratoRepository.save(prato1));
             log.info("Preloading " + pratoRepository.save(prato2));

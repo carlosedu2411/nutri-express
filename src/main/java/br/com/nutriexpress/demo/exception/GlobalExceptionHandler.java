@@ -23,9 +23,9 @@ public class GlobalExceptionHandler {
         return errors;
     }
 
-    @ExceptionHandler(ResourceNotFoundException.class)
+    @ExceptionHandler(PratoNaoEncontradoException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Map<String, String> handleResourceNotFound(ResourceNotFoundException ex) {
+    public Map<String, String> handleResourceNotFound(PratoNaoEncontradoException ex) {
         Map<String, String> error = new java.util.HashMap<>();
         error.put("erro", ex.getMessage());
         error.put("status", "404");
